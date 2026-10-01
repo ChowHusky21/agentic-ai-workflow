@@ -1,0 +1,384 @@
+<title>Agentic AI Workflow Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a public portfolio ledger read top to bottom. Thesis, control loop, threat-to-control mapping, error log with context, scope lines, evidence links */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --ink:#15202b; --muted:#53627a; --rule:#d8dee6;
+  --accent:#1d5f8a; --accent-soft:#e3eef6;
+  --ok:#2f7d57; --warn:#a86500; --gate:#b8423a; --int:#6a4c9c;
+  --s1:#1d5f8a; --s2:#c07a1c; --s3:#3f8f6b; --s4:#8a4f9e; --s5:#8b97a8;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f151c; --surface:#16202a; --ink:#e4eaf1; --muted:#9aa8ba; --rule:#2a3643;
+  --accent:#6fb3de; --accent-soft:#1b3246; --ok:#6cc59b; --warn:#e0a14d; --gate:#ef7f76; --int:#b99be0; --s1:#6fb3de; --s2:#e0a14d; --s3:#6cc59b; --s4:#c08fd4; --s5:#8f9db0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f151c; --surface:#16202a; --ink:#e4eaf1; --muted:#9aa8ba; --rule:#2a3643;
+  --accent:#6fb3de; --accent-soft:#1b3246; --ok:#6cc59b; --warn:#e0a14d; --gate:#ef7f76; --int:#b99be0; --s1:#6fb3de; --s2:#e0a14d; --s3:#6cc59b; --s4:#c08fd4; --s5:#8f9db0; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:16.5px/1.6 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:32px 64px;display:grid;gap:44px}
+h1,h2,h3{font-family:var(--display);font-stretch:85%;margin:0;text-wrap:balance;line-height:1.1}
+h1{font-size:clamp(2.1rem,5vw,3.1rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.45rem;font-weight:700}
+h3{font-size:1.04rem;font-weight:700}
+p{margin:0}
+.eyebrow{font:500 .72rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{color:var(--muted);max-width:70ch}
+.lede.big{font-size:1.12rem;color:var(--ink)}
+header{display:grid;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:22px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;font:400 .82rem var(--mono);color:var(--muted)}
+.meta a{color:var(--accent)}
+section{display:grid;gap:16px}
+.sechead{display:grid;gap:6px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.kpi{background:var(--surface);padding:16px;display:grid;gap:4px;align-content:start}
+.kpi b{font:700 2.1rem/1 var(--display);font-stretch:80%;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.9rem;color:var(--muted)}
+.loop{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.step{border:1px solid var(--rule);background:var(--surface);padding:12px 14px;display:grid;gap:6px;align-content:start}
+.step .tag{font:500 .7rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.step.gate{border:2px solid var(--gate)} .step.gate .tag{color:var(--gate)}
+.step p{font-size:.92rem;color:var(--muted)}
+.note{font-size:.95rem;color:var(--muted);border-left:3px solid var(--accent);padding-left:12px;max-width:80ch}
+.tbl{overflow-x:auto;border:1px solid var(--rule);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:700px;font-size:.93rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:500 .72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td.d{font-family:var(--mono);font-size:.82rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.risk b{display:block}
+td.risk span{font:500 .74rem var(--mono);color:var(--muted)}
+tr:last-child td{border-bottom:0}
+.pill{font:500 .72rem var(--mono);padding:2px 8px;border-radius:10px;white-space:nowrap}
+.pill.int{background:color-mix(in srgb,var(--int) 16%,transparent);color:var(--int)}
+.pill.pub{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+.pill.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--rule);padding:16px 18px;display:grid;gap:10px;align-content:start;min-width:0}
+.card ul{margin:0;padding-left:1.1em;display:grid;gap:5px;font-size:.95rem}
+.card.yes{border-top:4px solid var(--ok)} .card.no{border-top:4px solid var(--gate)}
+.ev{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.ev a{color:var(--accent);font-weight:600;text-decoration:none}
+.ev a:hover{text-decoration:underline}
+.ev .card p{font-size:.93rem;color:var(--muted)}
+.box{background:var(--surface);border:1px solid var(--rule);padding:16px;display:grid;gap:12px;min-width:0}
+.chartscroll{overflow-x:auto}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px;border-radius:2px}
+.tip{font:400 .82rem var(--mono);color:var(--muted);min-height:1.4em}
+.banner{display:grid;gap:8px;padding:14px 16px;border:2px solid var(--b);background:var(--surface)}
+.banner .lab{font:600 .78rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--b)}
+.banner p{font-size:.95rem}
+.fa{display:grid;gap:14px}
+.fa-why{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.fa-why div{background:var(--surface);border:1px solid var(--rule);padding:12px 14px;display:grid;gap:4px;font-size:.92rem}
+.fa-why b{font-family:var(--display);font-stretch:85%;font-size:1rem}
+.case{background:var(--surface);border:1px solid var(--rule);padding:14px 16px;display:grid;gap:12px}
+.case-h{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}
+.case-h h3{font-size:1.02rem}
+.case-h span{font:500 .78rem var(--mono);color:var(--muted)}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px;position:relative}
+.st5{border:1px solid var(--rule);border-top:4px solid var(--c);padding:10px 12px;display:grid;gap:4px;align-content:start;position:relative;background:var(--bg);min-width:0}
+.st5 .k{font:500 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--c)}
+.st5 p{font-size:.88rem}
+.st5:not(:last-child)::after{content:"";position:absolute;right:-17px;top:calc(50% - 6px);border:6px solid transparent;border-left:9px solid var(--muted)}
+.st5.bad{--c:var(--gate)} .st5.chal{--c:var(--int);background:color-mix(in srgb,var(--int) 8%,var(--bg));border-color:var(--int)}
+.st5.src{--c:var(--accent)} .st5.ok{--c:var(--ok)} .st5.rule{--c:var(--muted)}
+.who{justify-self:start;font:600 .7rem var(--mono);padding:2px 8px;border-radius:10px;background:var(--int);color:var(--surface)}
+.fa-note{font-size:.9rem;color:var(--muted);border-left:3px solid var(--int);padding-left:12px;max-width:85ch}
+@media (max-width:760px){.flow{grid-template-columns:1fr;gap:14px}.st5:not(:last-child)::after{right:calc(50% - 6px);top:auto;bottom:-15px;border:6px solid transparent;border-top:9px solid var(--muted)}}
+.hb{display:grid;gap:8px}
+.hbr{display:grid;grid-template-columns:minmax(0,11rem) 1fr 2ch;gap:10px;align-items:center;font-size:.9rem}
+.hbr .ht{height:14px;background:var(--bg);border-radius:2px;overflow:hidden}
+.hbr .ht i{display:block;height:100%;border-radius:2px}
+.hbr b{font-family:var(--mono);font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="banner" style="--b:var(--ok)"><span class="lab">Public edition</span><p>Covers my own projects only. No client work is included.</p></div>
+  <span class="eyebrow">Portfolio · Supervised agentic AI · Security operations mindset</span>
+  <h1>Agentic AI Workflow Ledger</h1>
+  <p class="lede big">I use AI agents the way a security team should use any privileged automation: least privilege, separation of duties, a human approval gate before anything changes, and an audit trail that records the agent's mistakes as carefully as its output.</p>
+  <p class="lede">This ledger covers twenty days of real work on my own projects: my public professional profiles, two open portfolio repositories, a job search, coursework and a home security lab. It is written for hiring managers and practitioners who want to see how I think about control, not just what the tools can do.</p>
+  <div class="meta"><span>Daniel Harris · CompTIA Security+ (SY0-701)</span><span>Period: Sep 11 – Sep 30, 2026</span><span>Updated Oct 1, 2026</span></div>
+</header>
+
+<section aria-labelledby="k">
+  <div class="sechead"><span class="eyebrow">At a glance</span><h2 id="k">The control system, by the numbers</h2></div>
+  <div class="kpis">
+    <div class="kpi"><b>31</b><span>versioned, self-contained prompt templates across three workflows</span></div>
+    <div class="kpi"><b>81</b><span>dated revisions to one workflow's design document as lessons were folded in</span></div>
+    <div class="kpi"><b>6</b><span>read-only audits of my public footprint across six platforms</span></div>
+    <div class="kpi"><b>10</b><span>approved change runs, each logged and verified against the live result</span></div>
+    <div class="kpi"><b>18</b><span>errors caught and documented: 12 false alarms, 3 other internal errors, 3 in my public repositories</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="l">
+  <div class="sechead"><span class="eyebrow">Method</span><h2 id="l">Five stages, with reading kept apart from changing</h2>
+  <p class="lede">Each stage is a separate prompt template with its own permissions. An audit can't edit anything, a draft can't publish, and an apply step can only carry out what was approved.</p></div>
+  <div class="loop">
+    <div class="step"><span class="tag">1 · Audit, read-only</span><h3>Observe</h3><p>Scores live profiles and repositories. Anything unreachable is flagged and skipped, never guessed.</p></div>
+    <div class="step"><span class="tag">2 · Draft, no live access</span><h3>Propose</h3><p>Writes proposed changes to a dated, versioned document for review.</p></div>
+    <div class="step gate"><span class="tag">3 · Human gate</span><h3>Approve</h3><p>I approve each item explicitly. Approval never carries over to the next item or the next run.</p></div>
+    <div class="step"><span class="tag">4 · Apply, one at a time</span><h3>Change</h3><p>Only the approved change, one platform at a time, so a mistake stays contained.</p></div>
+    <div class="step"><span class="tag">5 · Verify and log</span><h3>Confirm</h3><p>Re-reads the live result, such as a commit hash or exact published text, then files a dated log.</p></div>
+  </div>
+  <p class="note">The loop closes through the templates. When a run exposes a gap, the fix becomes a rule in the next template version, so later runs don't depend on anyone remembering the lesson. The main audit template reached version 20 in this period.</p>
+</section>
+
+<section aria-labelledby="act">
+  <div class="sechead"><span class="eyebrow">Activity</span><h2 id="act">Twenty days of work, by day</h2>
+  <p class="lede">Dated items created each day (Pacific time): workflow design revisions, commits to my public repositories, and the documents each workstream produced.</p></div>
+  <div class="box">
+    <div class="legend" id="lg1"></div>
+    <div class="chartscroll"><svg id="c1" role="img" aria-label="Stacked bar chart of dated items per day from Sep 11 to Sep 30, 2026. Busiest days were Sep 18 and Sep 28, with 26 items each."></svg></div>
+    <div class="tip" id="tip1">Hover or tap a day for its breakdown.</div>
+  </div>
+</section>
+
+
+<section aria-labelledby="s">
+  <div class="sechead"><span class="eyebrow">Security posture</span><h2 id="s">Known agent risks, and the control for each</h2>
+  <p class="lede">Mapped to the OWASP Top 10 for LLM Applications (2025) and the four functions of the NIST AI Risk Management Framework, so a reviewer can check the reasoning against recognized standards.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Risk</th><th>Control in this workflow</th><th>Evidence kept</th><th>NIST AI RMF</th></tr></thead>
+    <tbody>
+      <tr><td class="risk"><b>Excessive agency</b><span>OWASP LLM06:2025</span></td><td>Read, draft and apply are separate templates. Each public change needs its own approval. Job applications are reviewed and submitted by hand, and since Oct 1, 2026, I publish social media posts myself.</td><td>Dated "Applied" log for every change run</td><td>Manage</td></tr>
+      <tr><td class="risk"><b>Prompt injection</b><span>OWASP LLM01:2025</span></td><td>Audits are read-only, and nothing changes without per-item approval, so text planted in a web page can't trigger an action on its own.</td><td>Approval recorded before each apply step</td><td>Manage</td></tr>
+      <tr><td class="risk"><b>Misinformation</b><span>OWASP LLM09:2025</span></td><td>Every factual claim carries its source and the time it was read. Unverified items are labeled by strength rather than smoothed over. Skills backed only by exam objectives get knowledge-level wording, never "implemented."</td><td>Truth-check tables; error log below</td><td>Measure</td></tr>
+      <tr><td class="risk"><b>Sensitive information disclosure</b><span>OWASP LLM02:2025</span></td><td>No credentials, internal addresses or personal identifiers in any output. The agent never enters credentials. Where work involves regulated data such as patient records, that data never enters an AI tool.</td><td>Written working rules; redacted evidence only</td><td>Govern</td></tr>
+      <tr><td class="risk"><b>Integrity and accountability</b><span>Change management</span></td><td>Every file is versioned and time-stamped. Since Sep 26, superseded versions are archived rather than deleted, replacing an earlier trash-and-recreate practice. Each storage folder has one owning workflow, so parallel sessions can't overwrite each other.</td><td>Version history and archive folders</td><td>Govern</td></tr>
+      <tr><td class="risk"><b>Stale or cached data</b><span>Data quality</span></td><td>Audits must re-read live sources each run. A section that looks empty is re-checked with a real scroll before being reported, because pages that load on demand can appear blank.</td><td>Template rule added after a false report</td><td>Map</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section aria-labelledby="q">
+  <div class="sechead"><span class="eyebrow">Quality control, with context</span><h2 id="q">Errors caught, and what changed because of them</h2>
+  <p class="lede">I publish these because an AI workflow is only as trustworthy as its error handling. An agent that never seems to be wrong is one nobody is checking. Each entry led to a permanent change in the process.</p></div>
+  <div class="box">
+    <h3>The workflow's rulebook grew as errors were caught</h3>
+    <div class="legend" id="lg2"></div>
+    <div class="chartscroll"><svg id="c2" role="img" aria-label="Line chart of cumulative design-document revisions from Sep 11 to Sep 30, rising from 2 to 81, with markers on the days errors were caught: Sep 16, Sep 18, Sep 23, Sep 26, Sep 28 and Sep 30."></svg></div>
+    <div class="tip" id="tip2">Hover or tap a marker for the error caught that day.</div>
+  </div>
+
+
+  <h3>Caught in internal review, before anything was published</h3>
+  <p class="lede">Three errors of other kinds. The 12 false alarms have their own section and full log below.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Date</th><th>What happened</th><th>Lasting change</th><th>Reached public?</th></tr></thead>
+    <tbody>
+      <tr><td class="d">2026-09-16</td><td>An audit run suppressed verification steps it was supposed to perform</td><td>Verification scope written explicitly into the template</td><td><span class="pill int">No</span></td></tr>
+      <tr><td class="d">2026-09-23</td><td>An audit draft contained a fabricated citation</td><td>Sourcing failures escalated to elevated severity</td><td><span class="pill int">No</span></td></tr>
+      <tr><td class="d">2026-09-30</td><td>A browser editor mangled a multi-line paste</td><td>Caught before commit; full-file replacements done by upload</td><td><span class="pill int">No</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Found in my own public repositories by the audits, then fixed</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Date found</th><th>What the audit found</th><th>Fix</th><th>Status</th></tr></thead>
+    <tbody>
+            <tr><td class="d">2026-09-18</td><td>A public README still held an internal note to confirm its sample data contained no personal information</td><td>Data confirmed non-personal; note removed</td><td><span class="pill ok">Fixed same day</span></td></tr>
+      <tr><td class="d">2026-09-18</td><td>A public README pointed to a configuration file that didn't exist. Three audits flagged it, but it stayed open for five days.</td><td>A check against a fresh clone settled that the file was needed; it was created on Sep 23, and every referenced file is now checked for existence</td><td><span class="pill ok">Fixed Sep 23</span></td></tr>
+      <tr><td class="d">2026-09-26</td><td>A vulnerability table in a public write-up had severity scores and CVE mappings that didn't match the National Vulnerability Database</td><td>Each entry re-checked against NVD and corrected; a likely false positive labeled as such</td><td><span class="pill ok">Fixed</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">The README item taught me the most. Three audits reported it, but each judged it from the rendered page, so none could say for certain whether the file was needed, and it stayed open. Flagging a problem isn't the same as closing it. A mechanical check against a fresh copy of the repository settled it, and that check now runs every time.</p>
+</section>
+
+<section aria-labelledby="fa">
+  <div class="sechead"><span class="eyebrow">Verification</span><h2 id="fa">False alarms: when a check says "no," confirm it before acting</h2>
+  <p class="lede">An audit that reports something as missing, empty, broken or mismatched when it is fine is raising a false positive. Over twenty days the audits raised <b data-fa="total">12</b> of them. Every one was caught before it led to an unneeded change on a live profile, as far as the records show. Most were caught when I challenged the finding.</p></div>
+  <div class="fa">
+    <div class="kpis">
+      <div class="kpi"><b data-fa="total">12</b><span>false positives raised by audits and caught</span></div>
+      <div class="kpi"><b data-fa="mine">7</b><span>caught when I challenged the finding with a question, a screenshot or the real content</span></div>
+      <div class="kpi"><b data-fa="days">5</b><span>separate days they occurred on</span></div>
+      <div class="kpi"><b>0</b><span>led to an unneeded change on a live profile</span></div>
+    </div>
+    <div class="split">
+      <div class="box"><h3>Why the check was wrong</h3><div class="hb" id="hbCause"></div></div>
+      <div class="box"><h3>How it was caught</h3><div class="hb" id="hbWho"></div></div>
+    </div>
+    <div class="case">
+      <div class="case-h"><h3>Example: profile sections reported as empty</h3><span>Sep 30, 2026 · career footprint audit</span></div>
+      <div class="flow">
+        <div class="st5 bad"><span class="k">1 · First read</span><p>Audit reads four profile sections and finds them blank.</p></div>
+        <div class="st5 bad"><span class="k">2 · Provisional finding</span><p>"Education, Skills, Featured and Certifications are empty."</p></div>
+        <div class="st5 chal"><span class="k">3 · Challenge</span><span class="who">Me</span><p>I sent screenshots showing all four sections populated.</p></div>
+        <div class="st5 src"><span class="k">4 · Second check</span><p>Re-read with a real wait and scroll on each section page.</p></div>
+        <div class="st5 ok"><span class="k">5 · Outcome</span><p>All populated. Finding withdrawn; nothing was edited.</p></div>
+      </div>
+    </div>
+    <div class="case">
+      <div class="case-h"><h3>Example: three early-career roles reported missing</h3><span>Sep 23, 2026 · career footprint audit</span></div>
+      <div class="flow">
+        <div class="st5 bad"><span class="k">1 · First read</span><p>Audit reads the experience list, which shows only the most recent entries until expanded.</p></div>
+        <div class="st5 bad"><span class="k">2 · Provisional finding</span><p>Headline recommendation: "Three early-career roles are missing; add them."</p></div>
+        <div class="st5 chal"><span class="k">3 · Challenge</span><span class="who">Me</span><p>I sent the full text of all three entries from my live profile.</p></div>
+        <div class="st5 src"><span class="k">4 · Second check</span><p>Root cause traced to a collapsed "show all" list the audit never expanded.</p></div>
+        <div class="st5 ok"><span class="k">5 · Outcome</span><p>All three present in full. Audits must now expand and count every list before claiming anything is absent.</p></div>
+      </div>
+    </div>
+    
+    <h3>Every false positive on record</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Date</th><th>What the check reported</th><th>What was true</th><th>Why it was wrong</th><th>Caught by</th></tr></thead>
+      <tbody id="faBody"></tbody>
+    </table></div>
+    <p class="fa-note"><b>The rule that came out of it:</b> a finding that something is missing, empty, expired or mismatched stays unconfirmed until a second source agrees, ideally the primary one, read live. The lookup returned a false negative ("not there"), which raised a false-positive alarm. Confirming negatives before acting is what kept all of them harmless.</p>
+  </div>
+</section>
+
+
+
+<section aria-labelledby="ct">
+  <div class="sechead"><span class="eyebrow">Communication</span><h2 id="ct">How I write to the agent: courteous on hand-offs, specific on pushback</h2>
+  <p class="lede">I brief the agent the way I'd brief a colleague. I counted my "please" and "thank you" across <b data-ct="projects">4</b> project conversations and sorted each by the kind of message it came with. Courtesy is not a control; the controls are in the sections above. The count shows a working habit: polite when handing work off or accepting it, and still specific when pushing back.</p></div>
+  <div class="kpis">
+    <div class="kpi"><b data-ct="please">44</b><span>times I wrote "please"</span></div>
+    <div class="kpi"><b data-ct="insPct">75%</b><span>of them on instructions: handing work to the agent</span></div>
+    <div class="kpi"><b data-ct="thanks">12</b><span>times I wrote "thank you," almost all after accepting work or closing an exchange</span></div>
+    <div class="kpi"><b data-ct="chal">3</b><span>polite challenges that caught a real error, each backed by a screenshot or source</span></div>
+  </div>
+  <div class="split">
+    <div class="box"><h3>"Please," by the message it came with</h3><div class="hb" id="hbPlease"></div></div>
+    <div class="box"><h3>"Thank you," by when I said it</h3><div class="hb" id="hbThanks"></div></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Project conversation</th><th>"Please"</th><th>Instructions</th><th>Approvals</th><th>Challenges that caught an error</th><th>Corrections</th><th>"Thank you"</th></tr></thead>
+    <tbody id="ctBody"></tbody>
+  </table></div>
+  <p class="fa-note"><b>How this was counted:</b> each project's agent counted my messages in its own conversation, as of Oct 1, 2026. Most counts were rebuilt from condensed conversation records, so treat them as close, not exact. A message sent twice is counted once. The windows differ by project and some reach past the Sep 11–30 period used elsewhere on this page. The pattern matters more than the totals: not every challenge carried a "please," but every one was specific enough to check.</p>
+</section>
+
+
+<section aria-labelledby="b">
+  <div class="sechead"><span class="eyebrow">Scope</span><h2 id="b">Where the agent helps, and where I keep it out</h2></div>
+  <div class="split">
+    <div class="card yes"><h3>The agent does</h3><ul>
+      <li>Read-only audits of public pages and repositories</li>
+      <li>Research, with every source logged and dated</li>
+      <li>Drafts: profile copy, documentation, cover letters and plans</li>
+      <li>Approved, individually verified commits to my own repositories</li>
+      <li>Record-keeping: versioning, archiving and run logs</li>
+    </ul></div>
+    <div class="card no"><h3>The agent doesn't</h3><ul>
+      <li>Act without explicit approval for that specific item</li>
+      <li>Submit job applications; I review and submit each by hand</li>
+      <li>Publish social media posts; it drafts, I post (since Oct 1, 2026)</li>
+      <li>Enter passwords or handle credentials</li>
+      <li>Touch protected health information or client systems</li>
+      <li>Delete records; since Sep 26, superseded versions are archived</li>
+    </ul></div>
+  </div>
+</section>
+
+<section aria-labelledby="e">
+  <div class="sechead"><span class="eyebrow">Evidence</span><h2 id="e">Public work you can inspect</h2></div>
+  <div class="ev">
+    <div class="card"><a href="https://github.com/ChowHusky21/home-cybersecurity-lab">home-cybersecurity-lab</a><p>Isolated virtual lab with attacker and target machines. Includes a security policy, ethical-use terms and a license, all added through approved, logged runs.</p></div>
+    <div class="card"><a href="https://github.com/ChowHusky21/quickstart-cybersecurity-career-sims">quickstart-cybersecurity-career-sims</a><p>Three bootcamp career simulations written up as capture-the-flag style reports, with the vulnerability table corrected against NVD.</p></div>
+    <div class="card"><a href="https://github.com/ChowHusky21">github.com/ChowHusky21</a><p>Profile and commit history. 30 contributions in the last year as of Oct 1, 2026, up from 8 at the first audit on Sep 13.</p></div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Method.</strong> Figures come from file version histories, dated run logs, audit reports and git history for Sep 11–30, 2026. Employer names, contacts, compensation and private storage locations are left out. Client engagements are left out entirely, including any patient or health information; client work appears publicly only with the client&#39;s written approval.</p>
+  <p>Built with Claude (Anthropic) as a supervised agent. Every claim on this page was checked against those records before publishing.</p>
+  <p>Public edition v08 · 2026-10-01 0815PT</p>
+</footer>
+</div>
+<script>
+(()=>{const ns='http://www.w3.org/2000/svg',el=(t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+const days=[["09-11",2,0,0,0,0],["09-12",0,0,0,0,0],["09-13",2,0,1,0,0],["09-14",2,4,1,0,0],["09-15",6,5,1,0,0],["09-16",12,5,5,0,0],["09-17",6,0,3,0,0],["09-18",12,7,7,0,0],["09-19",0,0,0,0,0],["09-20",0,0,0,0,0],["09-21",0,0,0,0,0],["09-22",1,0,0,0,0],["09-23",9,2,5,0,0],["09-24",5,0,4,0,0],["09-25",11,0,5,2,0],["09-26",3,1,1,3,0],["09-27",4,2,4,9,0],["09-28",6,0,4,16,0],["09-29",0,0,0,0,0],["09-30",0,2,6,0,4]];
+const ser=[["Workflow design revisions","--s5"],["Repository commits","--s4"],["Profile and portfolio work","--s2"],["Job search documents","--s1"],["Lab documents","--s3"]];
+const lg=document.getElementById('lg1');ser.forEach(([n,c])=>{const s=document.createElement('span');s.innerHTML=`<i style="background:var(${c})"></i>${n}`;lg.appendChild(s)});
+let W=820,H=260,m={l:34,r:10,t:10,b:30},iw=W-m.l-m.r,ih=H-m.t-m.b,max=30,y=v=>m.t+ih-v/max*ih,bw=iw/days.length;
+const s1=document.getElementById('c1');s1.setAttribute('viewBox',`0 0 ${W} ${H}`);s1.style.width='100%';s1.style.minWidth='580px';
+[0,10,20,30].forEach(v=>{s1.appendChild(el('line',{x1:m.l,x2:W-m.r,y1:y(v),y2:y(v),stroke:'var(--rule)'}));const t=el('text',{x:m.l-6,y:y(v)+4,'text-anchor':'end'});t.textContent=v;s1.appendChild(t)});
+const tip1=document.getElementById('tip1');
+days.forEach((d,i)=>{const x=m.l+i*bw+bw*.17,w=bw*.66;let acc=0;const g=el('g',{tabindex:0});const tot=d.slice(1).reduce((a,b)=>a+b,0);
+ d.slice(1).forEach((v,j)=>{if(!v)return;g.appendChild(el('rect',{x,y:y(acc+v),width:w,height:y(acc)-y(acc+v),fill:`var(${ser[j][1]})`}));acc+=v});
+ if(tot){const top=el('rect',{x,y:y(tot),width:w,height:2,fill:'var(--ink)',opacity:.25});g.appendChild(top)}
+ g.appendChild(el('rect',{x:m.l+i*bw,y:m.t,width:bw,height:ih,fill:'transparent'}));
+ const f=()=>tip1.textContent=`Sep ${+d[0].slice(3)}: ${tot} items — `+ser.map((s,j)=>`${s[0].toLowerCase()} ${d[j+1]}`).join(', ');
+ g.addEventListener('mouseenter',f);g.addEventListener('focus',f);g.addEventListener('click',f);s1.appendChild(g);
+ if(i%2===0||i===days.length-1){const t=el('text',{x:m.l+i*bw+bw/2,y:H-10,'text-anchor':'middle'});t.textContent=+d[0].slice(3);s1.appendChild(t)}});
+/* chart 2 */
+const ev=[["09-16","oth","Audit run suppressed verification steps"],["09-18","fa","False alarm: Education section reported empty"],["09-18","fa","False alarm: website typo fixes reported not live (cached copy)"],["09-18","fa","False alarm: most recent role read as current job"],["09-18","pub","Internal note left in a public README"],["09-18","pub","README pointed to a missing file (closed Sep 23)"],["09-23","oth","Fabricated citation in an audit draft"],["09-23","fa","False alarm: three early-career roles reported missing"],["09-23","fa","False alarm: a teaching stint reported missing"],["09-23","fa","False alarm: a date mismatch that wasn't real"],["09-26","fa","False alarm: a link fix reported not live (cached view)"],["09-26","pub","Vulnerability table didn't match NVD"],["09-28","fa","False alarm: certificates undercounted (10 of 14)"],["09-28","fa","False alarm: degree name reported mismatched"],["09-30","fa","False alarm: profile sections reported empty"],["09-30","fa","False alarm: certificates reported mismatched"],["09-30","fa","False alarm: two job-site profiles reported unbuilt"],["09-30","oth","Browser editor mangled a paste"]];
+const lg2=document.getElementById('lg2');[["Cumulative design revisions","--accent","line"],["False alarm","--int",""],["Other internal error","--s1",""],["Found in public repos","--warn",""]].forEach(([n,c,k])=>{const s=document.createElement('span');s.innerHTML=`<i style="background:var(${c});${k?'height:3px;vertical-align:3px':''}"></i>${n}`;lg2.appendChild(s)});
+let cum=0;const pts=days.map(d=>{cum+=d[1];return[d[0],cum]});
+W=820;H=270;m={l:34,r:14,t:16,b:30};iw=W-m.l-m.r;ih=H-m.t-m.b;const mx=100,yy=v=>m.t+ih-v/mx*ih,xx=i=>m.l+i/(days.length-1)*iw;
+const s2=document.getElementById('c2');s2.setAttribute('viewBox',`0 0 ${W} ${H}`);s2.style.width='100%';s2.style.minWidth='580px';
+[0,25,50,75,100].forEach(v=>{s2.appendChild(el('line',{x1:m.l,x2:W-m.r,y1:yy(v),y2:yy(v),stroke:'var(--rule)'}));const t=el('text',{x:m.l-6,y:yy(v)+4,'text-anchor':'end'});t.textContent=v;s2.appendChild(t)});
+days.forEach((d,i)=>{if(i%2===0||i===days.length-1){const t=el('text',{x:xx(i),y:H-10,'text-anchor':'middle'});t.textContent=+d[0].slice(3);s2.appendChild(t)}});
+const area='M'+xx(0)+','+yy(0)+' '+pts.map((p,i)=>`L${xx(i)},${yy(p[1])}`).join(' ')+` L${xx(pts.length-1)},${yy(0)} Z`;
+s2.appendChild(el('path',{d:area,fill:'var(--accent)',opacity:.12}));
+s2.appendChild(el('path',{d:'M'+pts.map((p,i)=>`${xx(i)},${yy(p[1])}`).join(' L'),fill:'none',stroke:'var(--accent)','stroke-width':2.5,'stroke-linejoin':'round'}));
+const last=pts.length-1;s2.appendChild(el('circle',{cx:xx(last),cy:yy(pts[last][1]),r:4,fill:'var(--accent)'}));
+const lt=el('text',{x:xx(last)-8,y:yy(pts[last][1])+18,'text-anchor':'end',fill:'var(--ink)'});lt.textContent='81 revisions';s2.appendChild(lt);
+const tip2=document.getElementById('tip2'),seen={},cnt={};ev.forEach(([d])=>cnt[d]=(cnt[d]||0)+1);
+ev.forEach(([d,k,txt])=>{const i=days.findIndex(x=>x[0]===d);seen[d]=(seen[d]||0)+1;const n=Math.min(cnt[d],3),col=(seen[d]-1)%3,row=Math.floor((seen[d]-1)/3),cy=yy(pts[i][1])-20-row*16,base=Math.min(xx(i),W-m.r-12-(n-1)/2*16),cx=base+(col-(n-1)/2)*16;const g=el('g',{tabindex:0});
+ g.appendChild(el('line',{x1:cx,x2:xx(i),y1:cy,y2:yy(pts[i][1]),stroke:'var(--muted)','stroke-opacity':.4}));
+ g.appendChild(el('circle',{cx,cy,r:6,fill:k==='fa'?'var(--int)':k==='pub'?'var(--warn)':'var(--s1)',stroke:'var(--surface)','stroke-width':1.5}));
+ const f=()=>tip2.textContent=`Sep ${+d.slice(3)} — ${txt}`;g.addEventListener('mouseenter',f);g.addEventListener('focus',f);g.addEventListener('click',f);s2.appendChild(g)});
+})();
+</script>
+<script>
+(()=>{const rows=[
+["2026-09-18","Education section empty","It was populated; I checked my live profile directly","Hidden or partly loaded list","My challenge"],
+["2026-09-18","Website typo fixes not live","Fixed; the audit read a cached copy","Stale or cached copy","My challenge"],
+["2026-09-18","Most recent role shown as current job","The role had an end date","Misread or second-hand","My challenge"],
+["2026-09-23","Three early-career roles missing","All three present in full","Hidden or partly loaded list","My challenge"],
+["2026-09-23","A teaching stint missing","Present; detail was attributed to the wrong entry","Hidden or partly loaded list","Not recorded"],
+["2026-09-23","A one-year date mismatch between profile and resume","No real mismatch","Hidden or partly loaded list","Not recorded"],
+["2026-09-26","A link fix not live","Live; the anonymous view was cached","Stale or cached copy","Not recorded"],
+["2026-09-28","Only 10 certificates listed; three missing","14 listed, including all three","Hidden or partly loaded list","The agent's own re-check"],
+["2026-09-28","Degree name differs between profile and resume","Wording matched","Misread or second-hand","My challenge"],
+["2026-09-30","Education, Skills and Featured empty","All populated","Hidden or partly loaded list","My challenge"],
+["2026-09-30","Certificates on profile don't match my tracker","They matched","Hidden or partly loaded list","My challenge"],
+["2026-09-30","Two job-site profiles essentially unbuilt","One already strong; the other held only duplicate stubs","First-pass judgment","Follow-up review"]
+];
+const body=document.getElementById('faBody');
+rows.slice().reverse().forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="d">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]==='My challenge'?'<span class="pill int">My challenge</span>':r[4]}</td>`;body.appendChild(tr)});
+const count=k=>{const m=new Map();rows.forEach(r=>m.set(r[k],(m.get(r[k])||0)+1));return [...m.entries()].sort((a,b)=>b[1]-a[1])};
+const set=(a,v)=>document.querySelectorAll(`[data-fa="${a}"]`).forEach(e=>e.textContent=v);
+set('total',rows.length);set('mine',rows.filter(r=>r[4]==='My challenge').length);set('days',new Set(rows.map(r=>r[0])).size);
+const bars=(id,data,hi)=>{const el=document.getElementById(id),mx=Math.max(...data.map(d=>d[1]));
+ data.forEach(([n,v])=>{const d=document.createElement('div');d.className='hbr';d.innerHTML=`<span class="hl">${n}</span><span class="ht"><i style="width:${v/mx*100}%;background:var(${hi(n)})"></i></span><b>${v}</b>`;el.appendChild(d)})};
+bars('hbCause',count(3),n=>n==='Not recorded'?'--muted':'--accent');
+bars('hbWho',count(4),n=>n==='My challenge'?'--int':n==='Not recorded'?'--muted':'--s5');
+})();
+</script>
+<script>
+(()=>{/* [name, please:{ins,app,chal,cor}, thanks:{acc,close,sign,cor}, review] */
+const P=[
+["Social media profiles",[12,3,3,0],[0,2,0,0]],
+["This portfolio project",[6,2,0,3],[0,2,0,0]],
+["Job search",[13,0,0,0],[5,2,1,0]],
+["Home security lab",[2,0,0,0],[0,0,0,0]]
+];
+const sum=(i,k)=>P.reduce((a,p)=>a+p[i][k],0),tot=i=>[0,1,2,3].reduce((a,k)=>a+sum(i,k),0);
+const please=tot(1),thanks=tot(2);
+const set=(a,v)=>document.querySelectorAll(`[data-ct="${a}"]`).forEach(e=>e.textContent=v);
+set('projects',P.length);set('please',please);set('thanks',thanks);set('insPct',Math.round(sum(1,0)/please*100)+'%');set('chal',sum(1,2));
+const bars=(id,data,col)=>{const el=document.getElementById(id),mx=Math.max(...data.map(d=>d[1]));
+ data.forEach(([n,v],i)=>{const d=document.createElement('div');d.className='hbr';d.innerHTML=`<span class="hl">${n}</span><span class="ht"><i style="width:${v/mx*100}%;background:var(${col[i]})"></i></span><b>${v}</b>`;el.appendChild(d)})};
+bars('hbPlease',[["Instructions",sum(1,0)],["Approvals",sum(1,1)],["Challenges that caught an error",sum(1,2)],["Corrections",sum(1,3)]],['--accent','--ok','--int','--s2']);
+bars('hbThanks',[["After accepting work",sum(2,0)],["Closing an exchange",sum(2,1)],["Signing off",sum(2,2)],["Inside a correction",sum(2,3)]],['--ok','--s5','--s5','--s2']);
+const body=document.getElementById('ctBody');
+P.forEach(p=>{const tr=document.createElement('tr');if(p[3])tr.className='revrow';const t=p[1].reduce((a,b)=>a+b,0),th=p[2].reduce((a,b)=>a+b,0);
+ tr.innerHTML=`<td>${p[0]}</td><td><b>${t}</b></td>${p[1].map(v=>`<td>${v}</td>`).join('')}<td>${th}</td>`;body.appendChild(tr)});
+const tr=document.createElement('tr');tr.innerHTML=`<td><b>All</b></td><td><b>${please}</b></td>${[0,1,2,3].map(k=>`<td><b>${sum(1,k)}</b></td>`).join('')}<td><b>${thanks}</b></td>`;body.appendChild(tr);
+})();
+</script>
