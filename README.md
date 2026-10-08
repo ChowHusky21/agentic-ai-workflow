@@ -3,8 +3,8 @@
 A public record of how I supervise AI agents on my own cybersecurity projects: least privilege, separation of duties between reading and changing anything, a human approval gate before every public change, and an honest error log — including false alarms — mapped to the OWASP Top 10 for LLM Applications (2025) and the NIST AI Risk Management Framework.
 
 **[View the live page →](https://chowhusky21.github.io/agentic-ai-workflow/)**
-Also available as a [dark-mode PDF](./Agentic-AI-Workflow-Ledger-v08-dark.pdf).
+Also available as a [dark-mode PDF](./Agentic-AI-Workflow-Ledger-v09-dark.pdf).
 
-Public edition v08 · 2026-10-01 0815PT
+Public edition v09 · 2026-10-06 1154PT
 
 Client work is left out; it appears only with the client's written approval.
