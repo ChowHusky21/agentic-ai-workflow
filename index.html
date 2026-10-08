@@ -107,7 +107,7 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--rule);padd
   <h1>Agentic AI Workflow Ledger</h1>
   <p class="lede big">I use AI agents the way a security team should use any privileged automation: least privilege, separation of duties, a human approval gate before anything changes, and an audit trail that records the agent's mistakes as carefully as its output.</p>
   <p class="lede">This ledger covers twenty days of real work on my own projects: my public professional profiles, two open portfolio repositories, a job search, coursework and a home security lab. It is written for hiring managers and practitioners who want to see how I think about control, not just what the tools can do.</p>
-  <div class="meta"><span>Daniel Harris · CompTIA Security+ (SY0-701)</span><span>Period: Sep 11 – Sep 30, 2026</span><span>Updated Oct 1, 2026</span></div>
+  <div class="meta"><span>Daniel Harris · CompTIA Security+ (SY0-701)</span><span>Period: Sep 11 – Sep 30, 2026</span><span>Updated Oct 6, 2026</span></div>
 </header>
 
 <section aria-labelledby="k">
@@ -151,7 +151,7 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--rule);padd
   <div class="tbl"><table>
     <thead><tr><th>Risk</th><th>Control in this workflow</th><th>Evidence kept</th><th>NIST AI RMF</th></tr></thead>
     <tbody>
-      <tr><td class="risk"><b>Excessive agency</b><span>OWASP LLM06:2025</span></td><td>Read, draft and apply are separate templates. Each public change needs its own approval. Job applications are reviewed and submitted by hand, and since Oct 1, 2026, I publish social media posts myself.</td><td>Dated "Applied" log for every change run</td><td>Manage</td></tr>
+      <tr><td class="risk"><b>Excessive agency</b><span>OWASP LLM06:2025</span></td><td>Read, draft and apply are separate templates. Each public change needs its own approval. Job applications are reviewed and submitted by hand. The agent evaluates posts, comments, and messages and recommends next steps. Nothing is posted, sent, or changed without my explicit approval for that specific item, and the agent re-checks the live result afterward.</td><td>Dated "Applied" log for every change run</td><td>Manage</td></tr>
       <tr><td class="risk"><b>Prompt injection</b><span>OWASP LLM01:2025</span></td><td>Audits are read-only, and nothing changes without per-item approval, so text planted in a web page can't trigger an action on its own.</td><td>Approval recorded before each apply step</td><td>Manage</td></tr>
       <tr><td class="risk"><b>Misinformation</b><span>OWASP LLM09:2025</span></td><td>Every factual claim carries its source and the time it was read. Unverified items are labeled by strength rather than smoothed over. Skills backed only by exam objectives get knowledge-level wording, never "implemented."</td><td>Truth-check tables; error log below</td><td>Measure</td></tr>
       <tr><td class="risk"><b>Sensitive information disclosure</b><span>OWASP LLM02:2025</span></td><td>No credentials, internal addresses or personal identifiers in any output. The agent never enters credentials. Where work involves regulated data such as patient records, that data never enters an AI tool.</td><td>Written working rules; redacted evidence only</td><td>Govern</td></tr>
@@ -269,13 +269,14 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--rule);padd
       <li>Read-only audits of public pages and repositories</li>
       <li>Research, with every source logged and dated</li>
       <li>Drafts: profile copy, documentation, cover letters and plans</li>
+      <li>Evaluate posts, comments, and messages and recommend next steps</li>
+      <li>Send approved comments, invitations and messages, one item at a time</li>
       <li>Approved, individually verified commits to my own repositories</li>
       <li>Record-keeping: versioning, archiving and run logs</li>
     </ul></div>
     <div class="card no"><h3>The agent doesn't</h3><ul>
       <li>Act without explicit approval for that specific item</li>
       <li>Submit job applications; I review and submit each by hand</li>
-      <li>Publish social media posts; it drafts, I post (since Oct 1, 2026)</li>
       <li>Enter passwords or handle credentials</li>
       <li>Touch protected health information or client systems</li>
       <li>Delete records; since Sep 26, superseded versions are archived</li>
@@ -288,14 +289,14 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--rule);padd
   <div class="ev">
     <div class="card"><a href="https://github.com/ChowHusky21/home-cybersecurity-lab">home-cybersecurity-lab</a><p>Isolated virtual lab with attacker and target machines. Includes a security policy, ethical-use terms and a license, all added through approved, logged runs.</p></div>
     <div class="card"><a href="https://github.com/ChowHusky21/quickstart-cybersecurity-career-sims">quickstart-cybersecurity-career-sims</a><p>Three bootcamp career simulations written up as capture-the-flag style reports, with the vulnerability table corrected against NVD.</p></div>
-    <div class="card"><a href="https://github.com/ChowHusky21">github.com/ChowHusky21</a><p>Profile and commit history. 30 contributions in the last year as of Oct 1, 2026, up from 8 at the first audit on Sep 13.</p></div>
+    <div class="card"><a href="https://github.com/ChowHusky21">github.com/ChowHusky21</a><p>Profile and commit history. 34 contributions in the last year as of Oct 6, 2026, up from 8 at the first audit on Sep 13.</p></div>
   </div>
 </section>
 
 <footer>
   <p><strong>Method.</strong> Figures come from file version histories, dated run logs, audit reports and git history for Sep 11–30, 2026. Employer names, contacts, compensation and private storage locations are left out. Client engagements are left out entirely, including any patient or health information; client work appears publicly only with the client&#39;s written approval.</p>
   <p>Built with Claude (Anthropic) as a supervised agent. Every claim on this page was checked against those records before publishing.</p>
-  <p>Public edition v08 · 2026-10-01 0815PT</p>
+  <p>Public edition v09 · 2026-10-06 1154PT</p>
 </footer>
 </div>
 <script>
