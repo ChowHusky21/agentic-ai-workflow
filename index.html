@@ -106,8 +106,8 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--rule);padd
   <span class="eyebrow">Portfolio · Supervised agentic AI · Security operations mindset</span>
   <h1>Agentic AI Workflow Ledger</h1>
   <p class="lede big">I use AI agents the way a security team should use any privileged automation: least privilege, separation of duties, a human approval gate before anything changes, and an audit trail that records the agent's mistakes as carefully as its output.</p>
-  <p class="lede">This ledger covers twenty days of real work on my own projects: my public professional profiles, two open portfolio repositories, a job search, coursework and a home security lab. It is written for hiring managers and practitioners who want to see how I think about control, not just what the tools can do.</p>
-  <div class="meta"><span>Daniel Harris · CompTIA Security+ (SY0-701)</span><span>Period: Sep 11 – Sep 30, 2026</span><span>Updated Oct 6, 2026</span></div>
+  <p class="lede">This ledger covers twenty days of real work on my own projects: my public professional profiles, two open portfolio repositories, a job search, coursework and a home security lab. More examples run through Oct 8. It is written for hiring managers and practitioners who want to see how I think about control, not just what the tools can do.</p>
+  <div class="meta"><span>Daniel Harris · CompTIA Security+ (SY0-701)</span><span>Period: Sep 11 – Sep 30, 2026; examples to Oct 8</span><span>Updated Oct 8, 2026</span></div>
 </header>
 
 <section aria-labelledby="k">
@@ -241,13 +241,29 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--rule);padd
 
 
 
+<section aria-labelledby="mx">
+  <div class="sechead"><span class="eyebrow">More examples, Sep 30 – Oct 8</span><h2 id="mx">The same controls, in later work</h2>
+  <p class="lede">Five more cases from my records, after or at the edge of the period above. They are examples, not added to the counts at the top of the page.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Date</th><th>Where</th><th>What happened</th><th>What it shows</th></tr></thead>
+    <tbody>
+      <tr><td class="d">2026-10-08</td><td>Job search</td><td>A helper agent's web read reported a job posting as still open. A live check on the employer's own site found it closed, so the live read was used and the posting was dropped.</td><td>A live read outranks a cached or second-hand copy</td></tr>
+      <tr><td class="d">2026-10-03 to 10-04</td><td>Curation agent for a book account that isn't mine</td><td>The agent only reads and drafts; every caption, reply and suggestion comes to me first. The account owner signs in personally, and the agent never handles a password or verification code. It stops at a CAPTCHA, a verification prompt or any button that would post, send or follow. Text it reads on a page is treated as data: anything that reads like an instruction is reported, not followed. Its first run was read-only throughout.</td><td>Prompt-injection control (OWASP LLM01) and least privilege</td></tr>
+      <tr><td class="d">2026-10-02</td><td>Home lab</td><td>A network setting change seemed not to take effect. Reviewing my own work, I found I had not saved the setting, a slip the agent's diagnosis had missed. The agent had found a second, independent cause. Tests confirmed both.</td><td>Human review of the evidence catches what the agent misses</td></tr>
+      <tr><td class="d">2026-09-30</td><td>Home lab</td><td>A lab web-app container kept crash-looping. The agent traced the root cause to the image's startup script and proposed a fix that survives restarts. It counted as fixed only after I ran a restart test.</td><td>Evidence is the test result, not the explanation</td></tr>
+      <tr><td class="d">2026-10-01 to 10-08</td><td>Job search and this ledger</td><td>File names were stamped with a time ahead of the clock: three times in the job search and twice in this ledger's own work on Oct 1 (a spreadsheet title and a page footer). Each was caught by checking the clock and corrected before anyone relied on the file.</td><td>Rule: check the current time before stamping any name</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+
 <section aria-labelledby="ct">
   <div class="sechead"><span class="eyebrow">Communication</span><h2 id="ct">How I write to the agent: courteous on hand-offs, specific on pushback</h2>
-  <p class="lede">I brief the agent the way I'd brief a colleague. I counted my "please" and "thank you" across <b data-ct="projects">4</b> project conversations and sorted each by the kind of message it came with. Courtesy is not a control; the controls are in the sections above. The count shows a working habit: polite when handing work off or accepting it, and still specific when pushing back.</p></div>
+  <p class="lede">I brief the agent the way I'd brief a colleague. Each project's agent counted my "please" and "thank you" in its own conversation, on Oct 1 and again on Oct 8, across <b data-ct="projects">5</b> project conversations. Most uses were sorted by the kind of message they came with. Courtesy is not a control; the controls are in the sections above. The count shows a working habit: polite when handing work off or accepting it, and still specific when pushing back.</p></div>
   <div class="kpis">
-    <div class="kpi"><b data-ct="please">44</b><span>times I wrote "please"</span></div>
-    <div class="kpi"><b data-ct="insPct">75%</b><span>of them on instructions: handing work to the agent</span></div>
-    <div class="kpi"><b data-ct="thanks">12</b><span>times I wrote "thank you," almost all after accepting work or closing an exchange</span></div>
+    <div class="kpi"><b data-ct="please">90</b><span>times I wrote "please"</span></div>
+    <div class="kpi"><b data-ct="insPct">75%</b><span>of the <span data-ct="sorted">53</span> sorted uses were on instructions: handing work to the agent</span></div>
+    <div class="kpi"><b data-ct="thanks">26</b><span>times I wrote "thank you"; where sorted, almost all after accepting work or closing an exchange</span></div>
     <div class="kpi"><b data-ct="chal">3</b><span>polite challenges that caught a real error, each backed by a screenshot or source</span></div>
   </div>
   <div class="split">
@@ -255,10 +271,10 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--rule);padd
     <div class="box"><h3>"Thank you," by when I said it</h3><div class="hb" id="hbThanks"></div></div>
   </div>
   <div class="tbl"><table>
-    <thead><tr><th>Project conversation</th><th>"Please"</th><th>Instructions</th><th>Approvals</th><th>Challenges that caught an error</th><th>Corrections</th><th>"Thank you"</th></tr></thead>
+    <thead><tr><th>Project conversation</th><th>Counted</th><th>"Please"</th><th>Instructions</th><th>Approvals</th><th>Challenges that caught an error</th><th>Corrections</th><th>"Thank you"</th></tr></thead>
     <tbody id="ctBody"></tbody>
   </table></div>
-  <p class="fa-note"><b>How this was counted:</b> each project's agent counted my messages in its own conversation, as of Oct 1, 2026. Most counts were rebuilt from condensed conversation records, so treat them as close, not exact. A message sent twice is counted once. The windows differ by project and some reach past the Sep 11–30 period used elsewhere on this page. The pattern matters more than the totals: not every challenge carried a "please," but every one was specific enough to check.</p>
+  <p class="fa-note"><b>How this was counted:</b> each project's agent counted my messages in its own conversation, on Oct 1 and on Oct 8. Most counts were rebuilt from condensed conversation records, so treat them as close, not exact. Two Oct 8 counts were not sorted by type and are shown that way. Two Oct 8 windows may share a few messages; both are shown as reported. A message sent twice is counted once, and days between counts are not counted. The pattern matters more than the totals: not every challenge carried a "please," but every one was specific enough to check.</p>
 </section>
 
 
@@ -289,14 +305,14 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--rule);padd
   <div class="ev">
     <div class="card"><a href="https://github.com/ChowHusky21/home-cybersecurity-lab">home-cybersecurity-lab</a><p>Isolated virtual lab with attacker and target machines. Includes a security policy, ethical-use terms and a license, all added through approved, logged runs.</p></div>
     <div class="card"><a href="https://github.com/ChowHusky21/quickstart-cybersecurity-career-sims">quickstart-cybersecurity-career-sims</a><p>Three bootcamp career simulations written up as capture-the-flag style reports, with the vulnerability table corrected against NVD.</p></div>
-    <div class="card"><a href="https://github.com/ChowHusky21">github.com/ChowHusky21</a><p>Profile and commit history. 34 contributions in the last year as of Oct 6, 2026, up from 8 at the first audit on Sep 13.</p></div>
+    <div class="card"><a href="https://github.com/ChowHusky21">github.com/ChowHusky21</a><p>Profile and commit history. 38 contributions in the last year as of Oct 8, 2026, up from 8 at the first audit on Sep 13.</p></div>
   </div>
 </section>
 
 <footer>
-  <p><strong>Method.</strong> Figures come from file version histories, dated run logs, audit reports and git history for Sep 11–30, 2026. Employer names, contacts, compensation and private storage locations are left out. Client engagements are left out entirely, including any patient or health information; client work appears publicly only with the client&#39;s written approval.</p>
+  <p><strong>Method.</strong> Figures come from file version histories, dated run logs, audit reports and git history for Sep 11–30, 2026; the later examples and the courtesy counts run to Oct 8, 2026. Employer names, contacts, compensation and private storage locations are left out. Client engagements are left out entirely, including any patient or health information; client work appears publicly only with the client&#39;s written approval.</p>
   <p>Built with Claude (Anthropic) as a supervised agent. Every claim on this page was checked against those records before publishing.</p>
-  <p>Public edition v09 · 2026-10-06 1154PT</p>
+  <p>Public edition v10 · 2026-10-08 1716PT</p>
 </footer>
 </div>
 <script>
@@ -362,24 +378,31 @@ bars('hbWho',count(4),n=>n==='My challenge'?'--int':n==='Not recorded'?'--muted'
 })();
 </script>
 <script>
-(()=>{/* [name, please:{ins,app,chal,cor}, thanks:{acc,close,sign,cor}, review] */
+(()=>{/* [name, counted, please:[ins,app,chal,cor,unsorted], thanks:[acc,close,sign,cor,unsorted], review] — source: Courtesy Count v02, 2026-10-08 1704PT */
 const P=[
-["Social media profiles",[12,3,3,0],[0,2,0,0]],
-["This portfolio project",[6,2,0,3],[0,2,0,0]],
-["Job search",[13,0,0,0],[5,2,1,0]],
-["Home security lab",[2,0,0,0],[0,0,0,0]]
+["Social media profiles","Oct 1",[12,3,3,0,0],[0,2,0,0,0]],
+["This portfolio project","Oct 1",[6,2,0,3,0],[0,2,0,0,0]],
+["Job search","Oct 1",[13,0,0,0,0],[5,2,1,0,0]],
+["Home security lab","Oct 1",[2,0,0,0,0],[0,0,0,0,0]],
+
+["Social media profiles","Oct 8",[0,0,0,0,17],[0,0,0,0,5]],
+["Job search","Oct 8",[0,0,0,0,20],[0,0,0,0,8]],
+["Home security lab","Oct 8",[1,0,0,0,0],[0,0,0,0,0]],
+["Book-account curation agent","Oct 8",[1,0,0,0,0],[0,0,0,0,0]],
+["This portfolio project","Oct 8",[5,2,0,0,0],[0,1,0,0,0]]
 ];
-const sum=(i,k)=>P.reduce((a,p)=>a+p[i][k],0),tot=i=>[0,1,2,3].reduce((a,k)=>a+sum(i,k),0);
-const please=tot(1),thanks=tot(2);
+const sum=(i,k)=>P.reduce((a,p)=>a+p[i][k],0),tot=i=>[0,1,2,3,4].reduce((a,k)=>a+sum(i,k),0);
+const please=tot(2),thanks=tot(3),sorted=please-sum(2,4);
 const set=(a,v)=>document.querySelectorAll(`[data-ct="${a}"]`).forEach(e=>e.textContent=v);
-set('projects',P.length);set('please',please);set('thanks',thanks);set('insPct',Math.round(sum(1,0)/please*100)+'%');set('chal',sum(1,2));
+set('projects',new Set(P.map(p=>p[0])).size);set('please',please);set('thanks',thanks);set('sorted',sorted);set('insPct',Math.round(sum(2,0)/sorted*100)+'%');set('chal',sum(2,2));
 const bars=(id,data,col)=>{const el=document.getElementById(id),mx=Math.max(...data.map(d=>d[1]));
  data.forEach(([n,v],i)=>{const d=document.createElement('div');d.className='hbr';d.innerHTML=`<span class="hl">${n}</span><span class="ht"><i style="width:${v/mx*100}%;background:var(${col[i]})"></i></span><b>${v}</b>`;el.appendChild(d)})};
-bars('hbPlease',[["Instructions",sum(1,0)],["Approvals",sum(1,1)],["Challenges that caught an error",sum(1,2)],["Corrections",sum(1,3)]],['--accent','--ok','--int','--s2']);
-bars('hbThanks',[["After accepting work",sum(2,0)],["Closing an exchange",sum(2,1)],["Signing off",sum(2,2)],["Inside a correction",sum(2,3)]],['--ok','--s5','--s5','--s2']);
+bars('hbPlease',[["Instructions",sum(2,0)],["Approvals",sum(2,1)],["Challenges that caught an error",sum(2,2)],["Corrections",sum(2,3)],["Not sorted by type",sum(2,4)]],['--accent','--ok','--int','--s2','--muted']);
+bars('hbThanks',[["After accepting work",sum(3,0)],["Closing an exchange",sum(3,1)],["Signing off",sum(3,2)],["Inside a correction",sum(3,3)],["Not sorted by type",sum(3,4)]],['--ok','--s5','--s5','--s2','--muted']);
 const body=document.getElementById('ctBody');
-P.forEach(p=>{const tr=document.createElement('tr');if(p[3])tr.className='revrow';const t=p[1].reduce((a,b)=>a+b,0),th=p[2].reduce((a,b)=>a+b,0);
- tr.innerHTML=`<td>${p[0]}</td><td><b>${t}</b></td>${p[1].map(v=>`<td>${v}</td>`).join('')}<td>${th}</td>`;body.appendChild(tr)});
-const tr=document.createElement('tr');tr.innerHTML=`<td><b>All</b></td><td><b>${please}</b></td>${[0,1,2,3].map(k=>`<td><b>${sum(1,k)}</b></td>`).join('')}<td><b>${thanks}</b></td>`;body.appendChild(tr);
+P.forEach(p=>{const tr=document.createElement('tr');if(p[4])tr.className='revrow';const t=p[2].reduce((a,b)=>a+b,0),th=p[3].reduce((a,b)=>a+b,0);
+ const types=p[2][4]?`<td colspan="4" style="color:var(--muted)">Not sorted by type</td>`:p[2].slice(0,4).map(v=>`<td>${v}</td>`).join('');
+ tr.innerHTML=`<td>${p[0]}</td><td class="d">${p[1]}</td><td><b>${t}</b></td>${types}<td>${th}</td>`;body.appendChild(tr)});
+const tr=document.createElement('tr');tr.innerHTML=`<td><b>All</b></td><td></td><td><b>${please}</b></td>${[0,1,2,3].map(k=>`<td><b>${sum(2,k)}</b></td>`).join('')}<td><b>${thanks}</b></td>`;body.appendChild(tr);
 })();
 </script>
